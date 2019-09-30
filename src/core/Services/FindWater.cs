@@ -14,11 +14,14 @@ namespace Core.Services
         /// <returns></returns>
         public double FindWaterFlow(Glass glass, Water water)
         {
-            glass.Row += 1;
-            glass.Column += 1;
+            if (glass.Row < 0 || glass.Column < 0 || water.Flow < 0)
+                throw new InvalidOperationException("Values must be greater than 0");
 
             if (glass.Column > glass.Row)
-                return 0.0;
+                throw new InvalidOperationException("Number of rows MUST be greater than number of columns");
+
+            glass.Row += 1;
+            glass.Column += 1;
 
 
             var glassI = new Glass[(int)Math.Round((double)(glass.Row * (glass.Row + 1))) + 2];
