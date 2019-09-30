@@ -88,6 +88,7 @@ Docker version needs to be installed. Download [here](https://hub.docker.com/)
 
  ### Using Make with Docker (for mor information clic [here](https://www.gnu.org/software/make/))
 
+ 
  - Run Application:
 
  ```
@@ -101,9 +102,20 @@ Docker version needs to be installed. Download [here](https://hub.docker.com/)
 
  ```
 
- - Stop Application:
+ - Build Application:
+
  ```
- make stop
+ make build
+ ```
+
+ - Testing Application:
+ ```
+ make test
+ ```
+
+ - Test Coverage for the Application:
+ ```
+ make coverage
  ```
 
 ## Testing
