@@ -42,7 +42,7 @@ namespace test
 
             // Assert
             Assert.Throws<InvalidOperationException>(() => sut.FindWaterFlow(glass, water));
-            Assert.That(ex.Message, Is.EqualTo("Number of rows MUST be greater than number of rows"));
+            Assert.That(ex.Message, Is.EqualTo("Number of rows MUST be greater than number of columns"));
         }
 
         [Test]
