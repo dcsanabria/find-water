@@ -1,83 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.XPath;
-using Core.Models;
+﻿using Core.Models;
 using Core.Services;
 using Core.Services.Interfaces;
-using Moq;
 using NUnit.Framework;
-using NUnit.Framework.Constraints;
-using NUnit.Framework.Internal;
 
 namespace test
 {
     [TestFixture]
     public class UnitTest
     {
-
-        [Test]
-        public async Task Given_RowGreaterThanColumn_Then_ReturnZero()
+        [TestCase(0, 0, 200, ExpectedResult = 200)]
+        [TestCase(0, 0, 250, ExpectedResult = 250)]
+        [TestCase(0, 0, 500, ExpectedResult = 250)]
+        [TestCase(1, 0, 500, ExpectedResult = 125)]
+        [TestCase(1, 1, 500, ExpectedResult = 125)]
+        [TestCase(2, 1, 500, ExpectedResult = 125)]
+        public double Given_RowAndColumn_WhenValidWaterFlow_Then_ReturnValidResult(int row, int col, double flow)
         {
             // Arrange
-            var glass = new Glass { Row = 2, Column = 1 };
-            var water = new Water { Flow = 500 };
+            var glass = new Glass { Row = row, Column = col };
+            var water = new Water { Flow = flow };
             IFindWater sut = new FindWater();
 
             // Act
-            var expectedResult = await sut.FindWaterFlow(glass, water);
+            var expectedResult = sut.FindWaterFlow(glass, water);
 
             // Assert
-            Assert.That(expectedResult, Is.EqualTo(0));
+            return expectedResult;
         }
-
-        [Test]
-        public async Task Given_GlassRow0Column0_When_Water200_Then_Return200()
-        {
-            // Arrange
-            var glass = new Glass { Row = 0, Column = 0 };
-            var water = new Water { Flow = 200 };
-            IFindWater sut = new FindWater();
-
-            // Act
-            var expectedResult = await sut.FindWaterFlow(glass, water);
-
-            // Assert
-            Assert.That(expectedResult, Is.EqualTo(200));
-        }
-
-        [Test]
-        public async Task Given_GlassRow0Column0_When_Water250_Then_Return250()
-        {
-            // Arrange
-            var glass = new Glass { Row = 0, Column = 0 };
-            var water = new Water { Flow = 250 };
-            IFindWater sut = new FindWater();
-
-            // Act
-            var expectedResult = await sut.FindWaterFlow(glass, water);
-
-            // Assert
-            Assert.That(expectedResult, Is.EqualTo(250));
-        }
-
-        [Test]
-        public async Task Given_GlassRow0Column0_When_Water500_Then_Return250()
-        {
-            // Arrange
-            var glass = new Glass { Row = 0, Column = 0 };
-            var water = new Water { Flow = 500 };
-            IFindWater sut = new FindWater();
-
-            // Act
-            var expectedResult = await sut.FindWaterFlow(glass, water);
-
-            // Assert
-            Assert.That(expectedResult, Is.EqualTo(250));
-        }
-
-
-
     }
 }

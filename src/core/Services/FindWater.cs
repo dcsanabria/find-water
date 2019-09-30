@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Core.Models;
 using Core.Services.Interfaces;
 
@@ -8,35 +6,45 @@ namespace Core.Services
 {
     public class FindWater : IFindWater
     {
-
-        public async Task<double> FindWaterFlow(Glass glass, Water water)
+        /// <summary>
+        /// Giving a Glass Object with Row, Column, and amount of incoming water, return the amount of water of given glass
+        /// </summary>
+        /// <param name="glass">Glass Object</param>
+        /// <param name="water">Water Object</param>
+        /// <returns></returns>
+        public double FindWaterFlow(Glass glass, Water water)
         {
-            if (glass.Row > glass.Column)
-                return await Task.FromResult(0);
+            glass.Row += 1;
+            glass.Column += 1;
 
-            var glasses = new Glass[(glass.Row * (glass.Row + 1) / 2) + 2];
+            if (glass.Column > glass.Row)
+                return 0.0;
 
-            //Fill the top glass
+
+            var glassI = new Glass[(int)Math.Round((double)(glass.Row * (glass.Row + 1))) + 2];
+
             var index = 0;
-            glasses[index] = new Glass { Capacity = water.Flow };
+            glassI[index] = new Glass { Capacity = water.Flow };
 
-            //Mock the waterflow
+
             for (var row = 1; row <= glass.Row; ++row)
             {
-                for (var j = 0; j < row; j++)//each column
+                for (var col = 1; col <= row; ++col, ++index)
                 {
-                    water.Flow = glasses[index].Capacity;
-                    glasses[index].Capacity = (glasses[index].Capacity >= glass.Capacity) ? glass.Capacity : glasses[index].Capacity;
+                    water.Flow = glassI[index].Capacity;
+                    glassI[index].Capacity = (water.Flow >= glass.Capacity) ? glass.Capacity : water.Flow;
 
-                    // Distribute the remaining amount  
-                    // to the down two glasses 
-                    glasses[index + row] = new Glass { Capacity = glass.Capacity / 2 };
-                    glasses[index + row + 1] = new Glass { Capacity = glass.Capacity / 2 };
-                    glasses[index].Capacity = glasses[glass.Row * (glass.Row - 1) / 2 + glass.Column - 1].Capacity;
+
+                    water.Flow = (water.Flow >= glass.Capacity) ? (water.Flow - glass.Capacity) : 0.0;
+                    glassI[index + row] = new Glass();
+                    glassI[index + row + 1] = new Glass();
+
+                    glassI[index + row].Capacity = water.Flow / 2;
+                    glassI[index + row + 1].Capacity = water.Flow / 2;
                 }
             }
 
-            return await Task.FromResult(glasses[index].Capacity >= glass.Capacity ? glass.Capacity : glasses[index].Capacity);
+            return glassI[(glass.Row * (glass.Row - 1) / 2 + glass.Column - 1)].Capacity;
         }
     }
 }

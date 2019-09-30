@@ -9,7 +9,7 @@ namespace App
 {
     public class Program : ConfigureServices
     {
-        private static async Task Main()
+        private static void Main()
         {
             RegisterServices();
             var service = ServiceProvider.GetService<IFindWater>();
@@ -29,7 +29,7 @@ namespace App
             };
             var water = new Water { Flow = int.Parse(waterFlow ?? throw new InvalidOperationException()) };
 
-            var res = await service.FindWaterFlow(glass, water);
+            var res = service.FindWaterFlow(glass, water);
 
             Console.WriteLine($"Result: {res}");
             Console.Read();

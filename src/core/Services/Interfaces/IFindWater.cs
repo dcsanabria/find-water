@@ -5,6 +5,6 @@ namespace Core.Services.Interfaces
 {
     public interface IFindWater
     {
-        Task<double> FindWaterFlow(Glass glass, Water water);
+        double FindWaterFlow(Glass glass, Water water);
     }
 }
